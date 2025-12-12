@@ -25,7 +25,25 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
 
-    // all api create
+    const database = client.db("backend11DB");
+    const userCollection = database.collection("users");
+
+    app.post("/users", async (req, res) => {
+      const userInfo = req.body;
+      userInfo.role = "Buyer";
+      userInfo.createAt = new Date();
+      const result = await userCollection.insertOne(userInfo);
+      res.send(result);
+      console.log(userInfo);
+    });
+
+    app.get("/users/role/:email", async (req, res) => {
+      const {email} = req.params;
+      const query = { email: email };
+      const result = await userCollection.findOne(query);
+      console.log(result);
+      res.send(result);
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log(

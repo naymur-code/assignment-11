@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+h1{
+    text-align: center;
+    font-size: 30px;
+    padding: 30px;
+    font-weight: bold;
+    color: rgb(24, 158, 91);
+}
