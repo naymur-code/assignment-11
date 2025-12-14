@@ -6,14 +6,13 @@ import { auth } from "../firebase/firebase.init";
 const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  console.log("login", location);
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const pass = e.target.password.value;
     signInWithEmailAndPassword(auth, email, pass)
       .then((result) => {
-      navigate(location.state||'/')
+        navigate(location.state || '/')
         console.log(result);
       })
       .catch((error) => console.log(error));

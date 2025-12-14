@@ -14,6 +14,8 @@ const Register = () => {
     const email = form.email.value;
     const password = form.password.value;
     const photoUrl = form.photoUrl;
+    const role = form.role.value;
+    console.log(role)
 
     const file = photoUrl.files[0];
     const res = await axios.post(
@@ -29,8 +31,9 @@ const Register = () => {
 
     const fromData = {
       name,
-      email,
       photoUrl: mainPhotoUrl,
+      role,
+      email,
       password,
     };
 
@@ -86,6 +89,13 @@ const Register = () => {
                   className="input"
                   placeholder="PhotoUrl"
                 />
+
+                <label className="label">Role Select</label>
+                <select name="role" defaultValue="Chose Role" className="select">
+                  <option disabled={true}>Chose Role</option>
+                  <option value='manager'>Manager</option>
+                  <option value='buyer'>Buyer</option>
+                </select>
 
                 <label className="label">Email</label>
                 <input

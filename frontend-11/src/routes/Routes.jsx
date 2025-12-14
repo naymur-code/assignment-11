@@ -1,11 +1,13 @@
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import RootLayout from "../RootLayout/RootLayout";
+import RootLayout from "../layout/RootLayout";
 import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import PrivateRouter from "./PrivateRouter";
+import DashboardLayout from "../layout/DashboardLayout";
+import MainDashboard from "../pages/dashboard/MainDashboard";
+import AddProduct from "../pages/dashboard/AddProduct";
+import MangeProducts from "../pages/dashboard/MangeProducts";
 
 const router = createBrowserRouter([
   {
@@ -21,16 +23,16 @@ const router = createBrowserRouter([
       { path: "/home", element: <Home /> },
       { path: "/register", element: <Register /> },
       { path: "/login", element: <Login /> },
-      {
-        path: "/dashboard",
-        element: (
-          <PrivateRouter>
-            <Dashboard />
-          </PrivateRouter>
-        ),
-      },
     ],
   },
+  {
+    path: '/dashboard', Component: DashboardLayout,children:[
+      {index:true, element:<MainDashboard/>},
+      {path:'/dashboard/main', element:<MainDashboard/>},
+      {path:'/dashboard/add-product', element:<AddProduct/>},
+      {path:'/dashboard/mange-product', element:<MangeProducts/>}
+    ]
+  }
 ]);
 
 export default router;

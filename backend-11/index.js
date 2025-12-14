@@ -27,10 +27,10 @@ async function run() {
 
     const database = client.db("backend11DB");
     const userCollection = database.collection("users");
+    const productCollection = database.collection("products");
 
     app.post("/users", async (req, res) => {
       const userInfo = req.body;
-      userInfo.role = "Buyer";
       userInfo.createAt = new Date();
       const result = await userCollection.insertOne(userInfo);
       res.send(result);
@@ -38,12 +38,35 @@ async function run() {
     });
 
     app.get("/users/role/:email", async (req, res) => {
-      const {email} = req.params;
+      const { email } = req.params;
       const query = { email: email };
       const result = await userCollection.findOne(query);
-      console.log(result);
       res.send(result);
     });
+
+    // new product add
+    app.post('/products', async (req, res) => {
+      const data = req.body;
+      data.createAt = new Date()
+      const result = await productCollection.insertOne(data)
+      res.send(result)
+      console.log(data);
+    })
+
+    // show all products
+    app.get('/manager/products/:email', async (req, res) => {
+      const { email } = req.params;
+
+      const query = {
+        mangerEmail: email
+      }
+      const result = await productCollection.find().toArray()
+      res.send(result)
+
+      console.log(query);
+
+    })
+
 
     await client.db("admin").command({ ping: 1 });
     console.log(
