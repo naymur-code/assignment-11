@@ -6,8 +6,10 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import DashboardLayout from "../layout/DashboardLayout";
 import MainDashboard from "../pages/dashboard/MainDashboard";
-import AddProduct from "../pages/dashboard/AddProduct";
 import MangeProducts from "../pages/dashboard/MangeProducts";
+import AddRequest from "../pages/dashboard/AddRequest";
+import AllUsers from "../pages/dashboard/AllUsers";
+import PrivateRouter from "./PrivateRouter";
 
 const router = createBrowserRouter([
   {
@@ -26,11 +28,18 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/dashboard', Component: DashboardLayout,children:[
-      {index:true, element:<MainDashboard/>},
-      {path:'/dashboard/main', element:<MainDashboard/>},
-      {path:'/dashboard/add-product', element:<AddProduct/>},
-      {path:'/dashboard/mange-product', element:<MangeProducts/>}
+    path: '/dashboard',
+    element: <PrivateRouter>
+      <DashboardLayout />
+    </PrivateRouter>, children: [
+      { index: true, element: <MainDashboard /> },
+      { path: '/dashboard/main', element: <MainDashboard /> },
+      { path: '/dashboard/add-request', element: <AddRequest /> },
+      { path: '/dashboard/mange-product', element: <MangeProducts /> },
+      {
+        path: '/dashboard/all-users', element:
+          <AllUsers />
+      }
     ]
   }
 ]);

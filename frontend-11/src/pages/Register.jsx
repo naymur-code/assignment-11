@@ -1,22 +1,32 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.init";
 import axios from "axios";
 import { AuthContext } from "../provider/AuthProvider";
 
 const Register = () => {
   const { setUser, setLoading, loading } = useContext(AuthContext);
+  const [districts, setDistricts] = useState([])
+  const [upazilas, setUpazilas] = useState([])
+
+  useEffect(() => {
+    axios.get('districts.json')
+      .then(res => setDistricts(res.data?.districts))
+    axios.get('upazilas.json')
+      .then(res => setUpazilas(res.data?.upazilas))
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
+    const district = form.district.value;
+    const upazila = form.upazila.value;
+    const bloodGroup = form.bloodGroup.value;
     const photoUrl = form.photoUrl;
-    const role = form.role.value;
-    console.log(role)
-
     const file = photoUrl.files[0];
     const res = await axios.post(
       `https://api.imgbb.com/1/upload?key=d57038d1bb0012ba418be365dc12a3b6`,
@@ -32,10 +42,14 @@ const Register = () => {
     const fromData = {
       name,
       photoUrl: mainPhotoUrl,
-      role,
       email,
       password,
+      district,
+      upazila,
+      bloodGroup
     };
+    console.log(fromData);
+
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
@@ -82,6 +96,14 @@ const Register = () => {
                   placeholder="User Name"
                 />
 
+                <label className="label">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="input"
+                  placeholder="Email"
+                />
+
                 <label className="label">PhotoUrl</label>
                 <input
                   type="file"
@@ -90,20 +112,47 @@ const Register = () => {
                   placeholder="PhotoUrl"
                 />
 
-                <label className="label">Role Select</label>
-                <select name="role" defaultValue="Chose Role" className="select">
-                  <option disabled={true}>Chose Role</option>
-                  <option value='manager'>Manager</option>
-                  <option value='buyer'>Buyer</option>
+                <label className="label">Select Blood Group</label>
+                <select name="bloodGroup" className="select" required>
+                  <option value="">Select Blood Group</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
                 </select>
 
-                <label className="label">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  className="input"
-                  placeholder="Email"
-                />
+                <label className="label">Select Your District</label>
+
+                <select name="district" className="select" required defaultValue="">
+                  <option value="" disabled>
+                    Select Your District
+                  </option>
+
+                  {districts.map((district) => (
+                    <option value={district.name} key={district.id}>
+                      {district.name}
+                    </option>
+                  ))}
+                </select>
+
+
+                <label className="label">Select Your Upazila</label>
+                <select name="upazila" className="select" required defaultValue="">
+                  <option value="" disabled>
+                    Select Your Upazila
+                  </option>
+
+                  {upazilas.map((upazila) => (
+                    <option key={upazila.id} value={upazila.name}>
+                      {upazila.name}
+                    </option>
+                  ))}
+                </select>
+
 
                 <label className="label">Password</label>
                 <input

@@ -10,6 +10,7 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
+  const [userStatus,setUserStatus]=useState("")
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -24,17 +25,20 @@ const AuthProvider = ({ children }) => {
 
     axios.get(`http://localhost:5000/users/role/${user?.email}`).then((res) => {
       setRole(res.data.role);
+      setUserStatus(res.data.status)
     });
   }, [user]);
 
-  console.log(user);
-  
+  console.log(user, role);
+
   const authInfo = {
     name: "pranto",
     loading,
     user,
     setUser,
     setLoading,
+    role,
+    userStatus
   };
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };

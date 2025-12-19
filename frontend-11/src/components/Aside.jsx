@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import '../components/aside.css'
 import {
     HomeIcon,
@@ -9,17 +9,12 @@ import {
     ClipboardDocumentListIcon,
 } from "@heroicons/react/24/outline";
 import { Link, NavLink } from 'react-router';
+import { AuthContext } from '../provider/AuthProvider';
 
 const Aside = () => {
+    const { role } = useContext(AuthContext)
 
 
-    const menu = [
-        { name: "Dashboard", icon: HomeIcon, to: '/dashboard/main' },
-        { name: "Add Product", icon: ClipboardDocumentListIcon, to: '/dashboard/add-product' },
-        { name: "Mange Product", icon: ClipboardDocumentListIcon, to: '/dashboard/mange-product' },
-        { name: "Users", icon: UsersIcon, to: '/users' },
-    
-    ];
     return (
         <div>
             <aside className="h-screen  bg-gray-900 text-gray-100 flex flex-col">
@@ -30,16 +25,50 @@ const Aside = () => {
 
                 {/* Menu */}
                 <nav className="flex-1 px-4 py-6 space-y-2">
-                    {menu.map((item) => (
-                        <NavLink
-                            to={item.to}
-                            key={item.name}
+                    <NavLink
+                        to="/dashboard/main"
+                        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                    >
+                        <HomeIcon className="h-5 w-5" />
+                        <span>Dashboard</span>
+                    </NavLink>
+
+                    {
+                        role == 'donor' && <NavLink
+                            to="/dashboard/add-request"
                             className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
                         >
-                            <item.icon className="h-5 w-5" />
-                            <span>{item.name}</span>
+                            <ClipboardDocumentListIcon className="h-5 w-5" />
+                            <span>Add Request</span>
                         </NavLink>
-                    ))}
+
+                    }
+                    <NavLink
+                        to="/dashboard/mange-product"
+                        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                    >
+                        <ClipboardDocumentListIcon className="h-5 w-5" />
+                        <span>Manage Product</span>
+                    </NavLink>
+
+                    {
+                        role == 'admin' && <NavLink
+                            to="/dashboard/all-users"
+                            className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                        >
+                            <UsersIcon className="h-5 w-5" />
+                            <span>All Users</span>
+                        </NavLink>
+                    }
+
+                    <NavLink
+                        to="/users"
+                        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+                    >
+                        <UsersIcon className="h-5 w-5" />
+                        <span>Users</span>
+                    </NavLink>
+
                 </nav>
 
                 {/* Logout */}
